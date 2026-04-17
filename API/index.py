@@ -1,6 +1,10 @@
 import os
 from flask import Flask, render_template, request, redirect, url_for
 from openai import OpenAI
+import sys
+if sys.stdout.encoding != 'utf-8':
+    import io
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
 
 app = Flask(__name__, 
