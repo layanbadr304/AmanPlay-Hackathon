@@ -27,11 +27,11 @@
         <div class="circle-top"></div><div class="circle-bottom"></div>
         <div class="content">
             <div class="logo-section">
-                <img src="{{ url_for('static', filename='logo.png') }}" alt="AmanPlay Logo" style="width: 150px;">
+                <div style="font-size: 50px;">🛡️</div>
                 <div class="app-title">AMAN Play</div>
             </div>
             <div class="control-card">
-                <h2 style="margin-bottom:20px;">نظام الحماية</h2>
+                <h2 style="margin-bottom:20px; color: #444;">نظام الحماية</h2>
                 <label class="switch">
                     <input type="checkbox" id="mainToggle">
                     <span class="slider"></span>
@@ -43,7 +43,9 @@
     <script>
         document.getElementById('mainToggle').addEventListener('change', function() {
             if(this.checked) {
-                setTimeout(() => { window.location.href = "{{ url_for('detection') }}"; }, 500);
+                setTimeout(() => { 
+                    window.location.href = "{{ url_for('detection') }}"; 
+                }, 500);
             }
         });
     </script>
