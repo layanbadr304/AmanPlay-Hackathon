@@ -5,10 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AmanPlay - Detection</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, sans-serif; }
         body { background-color: #222; display: flex; justify-content: center; align-items: center; min-height: 100vh; overflow: hidden; }
         
-        /* Phone */
         .phone-container { 
             width: 375px; 
             height: 750px; 
@@ -20,7 +19,6 @@
             display: flex; 
             flex-direction: column; 
         }
-        
         
         .circle-bg { 
             position: absolute; 
@@ -48,7 +46,6 @@
         h1 { color: #26C6B0; font-size: 28px; margin-bottom: 5px; }
         .subtitle { color: #666; font-size: 14px; margin-bottom: 20px; }
 
-        
         .card { 
             width: 100%; 
             background-color: #f1f8f7; 
@@ -61,7 +58,6 @@
 
         h3 { color: #444; margin-bottom: 15px; font-size: 18px; font-weight: bold; }
 
-        /* Record buttoun*/
         .record-btn { 
             width: 80px; 
             height: 80px; 
@@ -90,7 +86,6 @@
             100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 71, 87, 0); }
         }
 
-        /* Text input*/
         .text-input { 
             width: 100%; 
             padding: 15px; 
@@ -138,15 +133,12 @@
             <h1>نظام الكشف</h1>
             <p class="subtitle">حلول ذكية لمجتمع ألعاب آمن</p>
 
-            <input type="hidden" id="main_virtual_key" value="sk-c-Mjq0yoJ0YXmGVNq-KeOA">
-
             <div class="card">
                 <h3>تسجيل صوتي مباشر</h3>
                 <button type="button" id="recordBtn" class="record-btn">🎙️</button>
                 <div id="record-status" style="margin-top:15px; font-size:14px; color:#666;">اضغطي للبدء بالتسجيل</div>
                 
                 <form action="{{ url_for('analyze') }}" method="post" enctype="multipart/form-data" id="audioForm" style="display:none;">
-                    <input type="hidden" name="virtual_key" id="hidden_audio_key">
                     <input type="file" name="audio_file" id="blob_file">
                 </form>
             </div>
@@ -154,9 +146,8 @@
             <div class="card">
                 <h3>كشف كتابي</h3>
                 <form action="{{ url_for('analyze') }}" method="post" id="textForm">
-                    <input type="hidden" name="virtual_key" id="hidden_text_key">
                     <input type="text" name="text_input" class="text-input" placeholder="اكتب الرسالة هنا..." required>
-                    <button type="button" onclick="submitTextForm()" class="submit-btn">بدأ الفحص</button>
+                    <button type="submit" class="submit-btn">بدء الفحص</button>
                 </form>
             </div>
         </div>
@@ -168,7 +159,6 @@
         const recordBtn = document.getElementById('recordBtn');
         const statusText = document.getElementById('record-status');
 
-        // وظيفة التحكم بالتسجيل
         recordBtn.onclick = async () => {
             if (!mediaRecorder || mediaRecorder.state === "inactive") {
                 try {
@@ -184,14 +174,11 @@
                         const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
                         statusText.innerText = "جاري المعالجة...";
                         
-                        // تجهيز الملف للإرسال
                         const file = new File([audioBlob], "recording.wav", { type: "audio/wav" });
                         const container = new DataTransfer();
                         container.items.add(file);
                         document.getElementById('blob_file').files = container.files;
 
-                        // تعبئة المفتاح وإرسال الفورم
-                        document.getElementById('hidden_audio_key').value = document.getElementById('main_virtual_key').value;
                         document.getElementById('audioForm').submit();
                     };
 
@@ -208,19 +195,6 @@
                 recordBtn.innerText = "🎙️";
             }
         };
-
-        // وظيفة إرسال النص
-        function submitTextForm() {
-            const key = document.getElementById('main_virtual_key').value;
-            const textInput = document.querySelector('input[name="text_input"]').value;
-            
-            if (textInput.trim() !== "") {
-                document.getElementById('hidden_text_key').value = key;
-                document.getElementById('textForm').submit();
-            } else {
-                alert("يرجى كتابة نص أولاً");
-            }
-        }
     </script>
 </body>
 </html>
