@@ -1,11 +1,15 @@
-from flask import Flask, render_template, request, redirect, url_for
 import os
+from flask import Flask, render_template, request, redirect, url_for
 from openai import OpenAI
 
-app = Flask(__name__)
+
+app = Flask(__name__, 
+            template_folder='../templates', 
+            static_folder='../static')
 
 app.config['UPLOAD_FOLDER'] = '/tmp'
 
+# إعدادات العميل (OpenAI / Elm)
 SHARED_API_KEY = "sk-jOfXp5r3BJHbH2erd8VFEg" 
 BASE_URL = "https://elmodels.ngrok.app/v1"
 
@@ -24,6 +28,7 @@ def analyze():
     user_text = ""
     text_input = request.form.get('text_input')
 
+    # أولاً: التحقق من وجود ملف صوتي
     if 'audio_file' in request.files and request.files['audio_file'].filename != '':
         file = request.files['audio_file']
         file_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
@@ -36,12 +41,15 @@ def analyze():
                 )
             user_text = transcript.text
         except Exception as e:
-            return f"Error: {e}"
+            return f"خطأ في تحويل الصوت: {e}"
         finally:
-            if os.path.exists(file_path): os.remove(file_path)
+            if os.path.exists(file_path): 
+                os.remove(file_path)
     else:
+        # ثانياً: إذا لم يوجد صوت، نأخذ النص من الحقل النصي
         user_text = text_input
 
+    # ثالثاً: تحليل النص باستخدام نموذج Nuha
     if user_text:
         try:
             response = client.chat.completions.create(
@@ -60,9 +68,10 @@ def analyze():
                 return render_template('recognition.html', result=user_text)
 
         except Exception as e:
-            return f"Error: {e}"
+            return f"خطأ في تحليل النص: {e}"
 
     return redirect(url_for('detection'))
 
+# ـ Vercel
 if __name__ == '__main__':
     app.run(debug=True)
