@@ -39,6 +39,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            word-wrap: break-word;
         }
 
         .back-btn { 
@@ -58,16 +59,13 @@
 <body>
     <div class="phone-container">
         <div class="circle-top"></div>
-        
         <div class="content">
             <div class="result-card">
                 <div class="icon-check">✓</div>
-                <h2>نتيجة الكشف</h2>
-                
+                <h2>محتوى آمن</h2>
                 <div class="result-text">
                     {{ result }}
                 </div>
-
                 <a href="{{ url_for('detection') }}" class="back-btn">فحص جديد</a>
             </div>
         </div>
