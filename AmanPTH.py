@@ -18,11 +18,11 @@ client = OpenAI(api_key=SHARED_API_KEY, base_url=BASE_URL)
 
 @app.route('/')
 def index():
-    return render_template('dashbored2.html')
+    return render_template('index.html')
 
 @app.route('/detection')
 def detection():
-    return render_template('detection.html')
+    return render_template('analysis.html')
 
 @app.route('/analyze', methods=['POST'])
 def analyze():
@@ -71,9 +71,9 @@ def analyze():
 
             # 3. Sutiable Interface
             if "YES" in prediction:
-                return render_template('Warnning.html', detected_text=user_text)
+                return render_template('alerts.html', detected_text=user_text)
             else:
-                return render_template('asr_result.html', result=user_text)
+                return render_template('recognition.html', result=user_text)
 
         except Exception as e:
             print(f"⚠️ خطأ في التحليل: {e}")
