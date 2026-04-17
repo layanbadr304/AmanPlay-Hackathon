@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AmanPlay - Warning</title>
+    <style>
+        :root {
+            --main-bg: #d1ebe5;
+            --accent-yellow: #f9e6a2;
+            --danger-red: #ff4757;
+            --primary-teal: #26C6B0;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #222;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        /* حاوية الجوال */
+        .phone-container {
+            width: 375px;
+            height: 750px;
+            background-color: #fff;
+            border-radius: 40px;
+            position: relative;
+            box-shadow: 0 0 0 10px #333, 0 20px 50px rgba(0,0,0,0.5);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .background-circles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .circle-top {
+            position: absolute;
+            top: -120px;
+            right: -80px;
+            width: 380px;
+            height: 380px;
+            background-color: var(--main-bg);
+            border-radius: 50%;
+            border: 2px solid var(--accent-yellow);
+        }
+
+        .circle-bottom {
+            position: absolute;
+            bottom: -150px;
+            left: -100px;
+            width: 400px;
+            height: 400px;
+            background-color: var(--main-bg);
+            border-radius: 50%;
+            border: 2px solid var(--accent-yellow);
+        }
+
+        .app-main {
+            flex: 1;
+            z-index: 5;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .alert-box {
+            width: 90%;
+            background-color: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(15px);
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            text-align: center;
+            animation: bounceIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid rgba(255,255,255,0.5);
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .alert-content {
+            padding: 40px 20px;
+        }
+
+        .warning-icon {
+            font-size: 50px;
+            margin-bottom: 15px;
+            display: inline-block;
+            animation: shake 2s infinite;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: rotate(0deg); }
+            10%, 30%, 50%, 70%, 90% { transform: rotate(-10deg); }
+            20%, 40%, 60%, 80% { transform: rotate(10deg); }
+        }
+
+        .alert-content h2 {
+            margin: 0;
+            font-size: 24px;
+            color: var(--danger-red);
+        }
+
+        /* تنسيق النص المرصود */
+        .detected-text-box {
+            margin-top: 15px;
+            padding: 10px;
+            background: #fff5f5;
+            border-right: 4px solid var(--danger-red);
+            font-style: italic;
+            color: #d63031;
+            font-size: 15px;
+            border-radius: 4px;
+        }
+
+        .alert-content p {
+            margin: 15px 0 0;
+            font-size: 16px;
+            color: #444;
+            line-height: 1.5;
+        }
+
+        .alert-buttons {
+            display: flex;
+            flex-direction: column;
+            padding: 0 20px 30px;
+            gap: 12px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 15px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: block;
+        }
+
+        .btn-confirm {
+            background-color: var(--danger-red);
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 71, 87, 0.3);
+        }
+
+        .btn-later {
+            background-color: #f1f2f6;
+            color: #555;
+        }
+
+        .home-indicator {
+            height: 5px;
+            width: 130px;
+            background-color: #333;
+            border-radius: 10px;
+            margin: 10px auto;
+            z-index: 10;
+            opacity: 0.2;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="phone-container">
+        <div class="background-circles">
+            <div class="circle-top"></div>
+            <div class="circle-bottom"></div>
+        </div>
+
+        <div class="app-main">
+            <div class="alert-box">
+                <div class="alert-content">
+                    <div class="warning-icon">⚠️</div>
+                    <h2>رصد تنمر!</h2>
+                    <p>لقد قام نظام <b>AmanPlay</b> بتحليل المحتوى ورصد لغة غير لائقة:</p>
+                    
+                    <div class="detected-text-box">
+                        "{{ detected_text }}"
+                    </div>
+                </div>
+                
+                <div class="alert-buttons">
+                    <a href="{{ url_for('index') }}" class="btn btn-confirm">العودة للرئيسية</a>
+                    <a href="{{ url_for('detection') }}" class="btn btn-later">إجراء فحص آخر</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="home-indicator"></div>
+    </div>
+    
+</body>
+</html>
