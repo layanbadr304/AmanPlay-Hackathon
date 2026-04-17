@@ -60,7 +60,7 @@ def analyze():
                 ],
                 temperature=0
             )
-            prediction = response.choices[0].message.content.strip().upper()
+            prediction = response.choices[0].message.content.encode('utf-8').decode('utf-8').strip().upper()
 
             if "YES" in prediction:
                 return render_template('alerts.html', detected_text=user_text)
